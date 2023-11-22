@@ -19,35 +19,10 @@ Pod::Spec.new do |spec|
 
   spec.source       = { :git => "https://github.com/facebook/zstd.git", :tag => "v#{spec.version}" }
 
-  spec.subspec 'common' do |sp|
-    sp.source_files = ['lib/common/**/*.{h,c}', "lib/zstd.h", "lib/zstd_errors.h"]
-    sp.public_header_files = ["lib/zstd.h", "lib/zstd_errors.h"]
-  end
+  public_header_files = ["lib/zstd.h", "lib/zstd_errors.h", "lib/zdict.h"]
 
-  spec.subspec 'compress' do |sp|
-    sp.source_files = ['lib/compress/**/*.{h,c}']
-    sp.dependency 'libzstd/common'
-  end
-
-  spec.subspec 'decompress' do |sp|
-    sp.source_files = ['lib/decompress/**/*.{h,c,S}']
-    sp.dependency 'libzstd/common'
-  end
-
-  spec.subspec 'dictBuilder' do |sp|
-    sp.source_files = ['lib/dictBuilder/**/*.{h,c}', "lib/zdict.h"]
-    sp.public_header_files = ["lib/zdict.h"]
-    sp.dependency 'libzstd/common'
-    sp.dependency 'libzstd/compress'
-  end
-
-  spec.subspec 'full' do |sp|
-    sp.dependency 'libzstd/dictBuilder'
-    sp.dependency 'libzstd/decompress'
-  end
-
-  spec.default_subspecs = :none
-
+  spec.source_files = ['lib/{compress,common,decompress,dictBuilder}/**/*.{h,c}'] + public_header_files
+  spec.public_header_files = public_header_files
   spec.swift_version = "5.0"
 
   spec.xcconfig = {
